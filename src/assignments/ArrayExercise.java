@@ -243,7 +243,7 @@ public class ArrayExercise
 	{
 		ArrayExercise ae = new ArrayExercise();
 		Scanner sc = new Scanner(System.in);
-		sc.useDelimiter(",|\\s+");
+		sc.useDelimiter(",|\\s+");		//Used in order to accept negative numbers from scanner.nextInt()
 		
 		int[] array10 = new int[10];
 		
