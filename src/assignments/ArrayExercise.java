@@ -163,6 +163,42 @@ public class ArrayExercise
 		System.out.println("Second half: " + Arrays.toString(arr2));
 	}
 	
+	public void splitHighestValue(int[] array)
+	{
+		int max = 0;
+		int index = 0;
+		
+		for (int i=0; i<array.length; i++)
+		{
+			if (array[i] > max)
+			{
+				max = array[i];
+				index = i;
+			}
+		}
+		
+		int secondMax = 0;
+		for (int i=0; i<array.length; i++)
+		{
+			if (array[i] > secondMax && array[i] != max)
+			{
+				secondMax = array[i];
+			}
+		}
+		
+		for (int i=0; i<array.length; i++)
+		{
+			if (index == i)
+			{
+				System.out.print(secondMax + " " + (max-secondMax) + " ");
+			}
+			else
+			{
+				System.out.print(array[i] + " ");
+			}
+		}
+	}
+	
 	public void shiftRight(int[] array, int amount)
 	{
 		System.out.println("Original array: " + Arrays.toString(array));
@@ -233,12 +269,14 @@ public class ArrayExercise
 		ae.split(array10);
 		System.out.println();
 		//No. 8
-		
+		ae.splitHighestValue(array10);
+		System.out.println();
 		//No. 9
 		ae.shiftRight(array10, 1);
 		System.out.println();
 		//No. 10
 		ae.sort(array10);
+		System.out.println();
 		
 		sc.close();
 	}
