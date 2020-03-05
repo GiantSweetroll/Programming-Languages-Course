@@ -113,7 +113,7 @@ public class ArrayExercise
 	public void findLargestAndSmallest(int[] array)
 	{
 		int min = Integer.MAX_VALUE;
-		int max = 0;
+		int max = Integer.MIN_VALUE;
 		
 		for (int num : array)
 		{
