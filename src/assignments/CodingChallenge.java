@@ -93,24 +93,32 @@ public class CodingChallenge
 		System.out.println(str);
 	}
 	
-	public void correctPath(String incompletePath, Dimension boardDim, Point startPos, Point endPos)
+	public String correctPath(String incompletePath, Dimension boardDim, Point startPos, Point endPos)
 	{
-		String[] choices = {"r", "l", "u", "d"};
-		
-		List<Point> prevPaths = new ArrayList<Point>();
-		prevPaths.add(startPos);
-		
-		StringBuilder path = new StringBuilder("Not Possible");	//By default the path is "Not Possible"
-		
-		this.findPath(incompletePath, 
-						incompletePath.substring(0, 1), 
-						choices, 
-						prevPaths, 
-						new Dimension(5, 5),
-						endPos,
-						path);
-		
-		System.out.println("Path: " + path.toString());
+		//Check if starting and end position is in the board
+		if (this.isInTheBoard(startPos, boardDim) && this.isInTheBoard(endPos, boardDim))
+		{
+			String[] choices = {"r", "l", "u", "d"};
+			
+			List<Point> prevPaths = new ArrayList<Point>();
+			prevPaths.add(startPos);
+			
+			StringBuilder path = new StringBuilder("Not Possible");	//By default the path is "Not Possible"
+			
+			this.findPath(incompletePath, 
+							incompletePath.substring(0, 1), 
+							choices, 
+							prevPaths, 
+							new Dimension(5, 5),
+							endPos,
+							path);
+			
+			return path.toString();
+		}
+		else
+		{
+			return "Not Possible";
+		}
 	}
 	
 	public void findPath(String incompletePath,
@@ -214,7 +222,7 @@ public class CodingChallenge
 		}
 		
 		//Check if new position exists on the board
-		if ((point.x >= 0 && point.x < boardDim.width) && (point.y >= 0 && point.y < boardDim.height))
+		if (this.isInTheBoard(point, boardDim))
 		{
 			return point;
 		}
@@ -224,22 +232,31 @@ public class CodingChallenge
 		}
 	}
 	
+	public boolean isInTheBoard(Point point, Dimension boardDim)
+	{
+		return (point.x >= 0 && point.x < boardDim.width) && (point.y >= 0 && point.y < boardDim.height);
+	}
+	
 	public static void main (String argsp[])
 	{
 		CodingChallenge cc = new CodingChallenge();
 		
 		//Challenge 1
+		System.out.println("Challenge 1:");
 		cc.balanceScale(new String[] {"5, 9", "1, 2, 6, 7"});
 		cc.balanceScale(new String[] {"3, 4", "1, 2, 7, 7"});
 		cc.balanceScale(new String[] {"13, 4", "1, 2, 3, 6, 14"});
 		cc.balanceScale(new String[] {"2, 4", "1, 5, 10"});
 		
+		System.out.println();
+		
 		//Challenge 2
+		System.out.println("Challenge 2:");
 		Dimension boardDim = new Dimension(5, 5);
 		Point startPos = new Point(0, 4);		//Top left
 		Point endPos = new Point(4, 0);			//Bottom right
-		cc.correctPath("r?d?drdd", boardDim, startPos, endPos);
-		cc.correctPath("???rrurdr?", boardDim, startPos, endPos);
-		cc.correctPath("drdr??rrddd?", boardDim, startPos, endPos);
+		System.out.println(cc.correctPath("r?d?drdd", boardDim, startPos, endPos));
+		System.out.println(cc.correctPath("???rrurdr?", boardDim, startPos, endPos));
+		System.out.println(cc.correctPath("drdr??rrddd?", boardDim, startPos, endPos));
 	}
 }
