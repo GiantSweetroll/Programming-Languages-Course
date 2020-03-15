@@ -93,95 +93,101 @@ public class CodingChallenge
 		System.out.println(str);
 	}
 	
-	public void correctPath(String incompletePath)
+	public void correctPath(String incompletePath, Dimension boardDim, Point startPos, Point endPos)
 	{
 		String[] choices = {"r", "l", "u", "d"};
 		
 		List<Point> prevPaths = new ArrayList<Point>();
-		prevPaths.add(new Point(0, 0));
+		prevPaths.add(startPos);
 		
-		String path = this.findPath(incompletePath, 
-									incompletePath.substring(0, 1), 
-									choices, 
-									prevPaths, 
-									new Dimension(5, 5));
+		StringBuilder path = new StringBuilder("Not Possible");	//By default the path is "Not Possible"
 		
-		System.out.println("Path: " + path);
+		this.findPath(incompletePath, 
+						incompletePath.substring(0, 1), 
+						choices, 
+						prevPaths, 
+						new Dimension(5, 5),
+						endPos,
+						path);
+		
+		System.out.println("Path: " + path.toString());
 	}
 	
-	public String findPath(String incompletePath,
+	public void findPath(String incompletePath,
 							String currentPath,
-							String[] choices, 
+							String[] choices,
 							List<Point> prevPath,
-							Dimension boardDim)
+							Dimension boardDim,
+							Point endPos,
+							StringBuilder path)
 	{
-		if (currentPath.length() == incompletePath.length())
+		if (currentPath.length() == incompletePath.length() && !currentPath.substring(currentPath.length()-1).equals("?"))
 		{
-			Point finalPos = prevPath.get(prevPath.size());
-			Point finishPos = new Point(boardDim.width-1, boardDim.height-1);
-			if (finalPos.x == finishPos.x && finalPos.y == finishPos.y)
+			//Update position to check if its a legit location on the board
+			Point finalPos = updateCoordinate(prevPath.get(prevPath.size()-1), 
+												currentPath.substring(currentPath.length()-1), 
+												boardDim);
+			if (finalPos != null)
 			{
-				return currentPath;
-			}
-			else
-			{
-				return "Not Possible";
+				//Check if the final position is proper
+				if (finalPos.x == endPos.x && finalPos.y == endPos.y)
+				{
+					path.replace(0, path.length(), currentPath);
+				}
 			}
 		}
 		else
 		{
-			String currentChoice = currentPath.substring(currentPath.length()-1);
+			String currentChoice = currentPath.substring(currentPath.length()-1);	//u, d, l, r, or ?
 			if (!currentChoice.equals("?"))
 			{
+				//Update position
 				Point point = this.updateCoordinate(prevPath.get(prevPath.size()-1), 
-													currentPath.substring(currentPath.length()-1), 
+													currentChoice, 
 													boardDim);
-				if (point == null)
-				{
-					return "";
-				}
-				else
+				
+				if (point != null)		//If its a valid path
 				{
 					//Check if new location has been traversed before
+					boolean unique = true;
 					for (Point pt : prevPath)
 					{
 						if (pt.x == point.x && pt.y == point.y)
 						{
-							return "";
+							unique = false;
+							break;
 						}
 					}
 					
 					//If new cell is unique
-					prevPath.add(point);
-					return findPath(incompletePath,
-									currentPath + incompletePath.substring(currentPath.length(), currentPath.length() +1),
+					if (unique)
+					{
+						prevPath.add(point);
+						findPath(incompletePath,
+									currentPath + incompletePath.substring(currentPath.length(), currentPath.length()+1),
 									choices,
 									prevPath,
-									boardDim);
+									boardDim,
+									endPos,
+									path);
+					}
 				}
 			}
 			else	//If current cell is "?"
 			{
-				List<String> branches = new ArrayList<String>();
+				//Try all possible outcomes
 				for (String choice : choices)
 				{
-					branches.add(this.findPath(incompletePath, 
-												currentPath.substring(currentPath.length()-1) + choice,
-												choices, 
-												prevPath, 
-												boardDim));
+					List<Point> newPath = new ArrayList<Point>();
+					newPath.addAll(prevPath);
+					this.findPath(incompletePath, 
+									currentPath.substring(0, currentPath.length()-1) + choice, //Removes the "?" and replaces it with one of the four choices (u, d, l, r)
+									choices, 
+									newPath, 
+									boardDim,
+									endPos,
+									path);
 				}
-				
-				//return the path that exists
-				for (String branch : branches)
-				{
-					if (!branch.equals(""))
-					{
-						return branch;
-					}
-				}
-				System.out.println("HelloWlrd");
-				return "";
 			}
 		}
 	}
@@ -192,7 +198,7 @@ public class CodingChallenge
 		//Update to new position
 		if (chosenPath.equals("u"))
 		{
-			point = new Point(currentCell.x, currentCell.y-1);
+			point = new Point(currentCell.x, currentCell.y+1);
 		}
 		else if (chosenPath.equals("l"))
 		{
@@ -200,7 +206,7 @@ public class CodingChallenge
 		}
 		else if (chosenPath.equals("d"))
 		{
-			point = new Point(currentCell.x, currentCell.y+1);
+			point = new Point(currentCell.x, currentCell.y-1);
 		}
 		else	//(chosenPath.equals("r"))
 		{
@@ -208,7 +214,7 @@ public class CodingChallenge
 		}
 		
 		//Check if new position exists on the board
-		if ((point.x >= 0 && point.x < boardDim.width) && (point.y <= 0 && point.y < boardDim.height))
+		if ((point.x >= 0 && point.x < boardDim.width) && (point.y >= 0 && point.y < boardDim.height))
 		{
 			return point;
 		}
@@ -229,17 +235,9 @@ public class CodingChallenge
 //		cc.balanceScale(new String[] {"2, 4", "1, 5, 10"});
 		
 		//Challenge 2
-//		cc.correctPath("???rrurdr?");
-		List<Integer> list = new ArrayList<Integer>();
-		for (int i=0; i<5; i++)
-		{
-			list.add(i);
-		}
-		
-		for (int i=0; i<list.size()-2; i++)
-		{
-			list.remove(0);
-		}
-		System.out.println(list.get(1));
+		Dimension boardDim = new Dimension(5, 5);
+		Point startPos = new Point(0, 4);
+		Point endPos = new Point(4, 0);
+		cc.correctPath("???rrurdr?", boardDim, startPos, endPos);
 	}
 }
