@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CodingChallenge
 {
-	public void balanceScale(String[] array)
+	public String balanceScale(String[] array)
 	{
 		//Get scales and available weights
 		int left = Integer.parseInt(array[0].substring(0, array[0].indexOf(", ")));
@@ -90,7 +90,7 @@ public class CodingChallenge
 			}
 		}
 		
-		System.out.println(str);
+		return str;
 	}
 	
 	public String correctPath(String incompletePath, Dimension boardDim, Point startPos, Point endPos)
@@ -243,10 +243,10 @@ public class CodingChallenge
 		
 		//Challenge 1
 		System.out.println("Challenge 1:");
-		cc.balanceScale(new String[] {"5, 9", "1, 2, 6, 7"});
-		cc.balanceScale(new String[] {"3, 4", "1, 2, 7, 7"});
-		cc.balanceScale(new String[] {"13, 4", "1, 2, 3, 6, 14"});
-		cc.balanceScale(new String[] {"2, 4", "1, 5, 10"});
+		System.out.println(cc.balanceScale(new String[] {"5, 9", "1, 2, 6, 7"}));
+		System.out.println(cc.balanceScale(new String[] {"3, 4", "1, 2, 7, 7"}));
+		System.out.println(cc.balanceScale(new String[] {"13, 4", "1, 2, 3, 6, 14"}));
+		System.out.println(cc.balanceScale(new String[] {"2, 4", "1, 5, 10"}));
 		
 		System.out.println();
 		
