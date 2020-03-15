@@ -228,16 +228,18 @@ public class CodingChallenge
 	{
 		CodingChallenge cc = new CodingChallenge();
 		
-//		//Challenge 1
-//		cc.balanceScale(new String[] {"5, 9", "1, 2, 6, 7"});
-//		cc.balanceScale(new String[] {"3, 4", "1, 2, 7, 7"});
-//		cc.balanceScale(new String[] {"13, 4", "1, 2, 3, 6, 14"});
-//		cc.balanceScale(new String[] {"2, 4", "1, 5, 10"});
+		//Challenge 1
+		cc.balanceScale(new String[] {"5, 9", "1, 2, 6, 7"});
+		cc.balanceScale(new String[] {"3, 4", "1, 2, 7, 7"});
+		cc.balanceScale(new String[] {"13, 4", "1, 2, 3, 6, 14"});
+		cc.balanceScale(new String[] {"2, 4", "1, 5, 10"});
 		
 		//Challenge 2
 		Dimension boardDim = new Dimension(5, 5);
-		Point startPos = new Point(0, 4);
-		Point endPos = new Point(4, 0);
+		Point startPos = new Point(0, 4);		//Top left
+		Point endPos = new Point(4, 0);			//Bottom right
+		cc.correctPath("r?d?drdd", boardDim, startPos, endPos);
 		cc.correctPath("???rrurdr?", boardDim, startPos, endPos);
+		cc.correctPath("drdr??rrddd?", boardDim, startPos, endPos);
 	}
 }
