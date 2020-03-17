@@ -210,66 +210,42 @@ public class MagicSquare
 									indexes[i][1]);
 		}
 		
-		//Identify the numbers to be swapped
-		List<Point>[][] indexesForSwapping = new List[2][3];
-		for (int a=0, b=0; a<3; a+=2, b++)
-		{
-			//Get the top left indexes before the median
-			int counter = 0;
-			List<Point> topAIndexes = new ArrayList<Point>();
-			while (counter < boxesInEachRowQ/2)
-			{
-				topAIndexes.add(new Point(indexes[a][0].x, counter));
-				counter++;
-			}
-			//Get the middle indexes
-			List<Point> middleAIndexes = new ArrayList<Point>();
-			Point point = new Point(topAIndexes.get(0).x+1, 1);
-			for (int i=0; i<topAIndexes.size(); i++)
-			{
-				middleAIndexes.add(new Point(point.x, point.y));
-				point.y++;
-			}
-			//Get lower left indexes
-			List<Point> lowerAIndexes = new ArrayList<Point>();
-			counter = 0;
-			for (int i=0; i<topAIndexes.size(); i++)
-			{
-				lowerAIndexes.add(new Point(indexes[a][0].x + boxesInEachRowQ-1, counter));
-				counter++;
-			}
-			
-			//Add to the array
-			indexesForSwapping[b][0] = topAIndexes;
-			indexesForSwapping[b][1] = middleAIndexes;
-			indexesForSwapping[b][2] = lowerAIndexes;
-		}
-		
 		//Swap quadrant A and D
-		for (int i=0; i<indexesForSwapping[0].length; i++)
+		int indexMiddle = boxesInEachRowQ/2;
+		int rowsSwapped = 0;
+		for (int i=0, j=boxesInEachRowQ, k=indexMiddle+1, l=1 + boxesInEachRowQ + indexMiddle; i<indexMiddle; i++, j++, k++, l++)
 		{
-			for (int a=0; a<indexesForSwapping[0][i].size(); a++)
+			for (int a=0; a<indexMiddle; a++)
 			{
-				Point pointA = indexesForSwapping[0][i].get(a);
-				Point pointD = indexesForSwapping[1][i].get(a);
-				int num = this.matrix[pointA.x][pointA.y];
-				this.matrix[pointA.x][pointA.y] = this.matrix[pointD.x][pointD.y];
-				this.matrix[pointD.x][pointD.y] = num;
+				//Swap top
+				int num = this.matrix[i][a];
+				this.matrix[i][a] = this.matrix[j][a];
+				this.matrix[j][a] = num;
+				
+				//Swap bottom
+				num = this.matrix[k][a];
+				this.matrix[k][a] = this.matrix[l][a];
+				this.matrix[l][a] = num;
 			}
+			rowsSwapped++;
+		}
+		//Swap Center
+		for (int i=0; i<rowsSwapped; i++)
+		{
+			int num = this.matrix[indexMiddle][i+1];
+			this.matrix[indexMiddle][i+1] = this.matrix[boxesInEachRowQ + indexMiddle][i+1];
+			this.matrix[boxesInEachRowQ + indexMiddle][i+1] = num;
 		}
 		
 		//Identify points to be swapped between B and C
-		int highlightEachRow = indexesForSwapping[0][0].size()-1;
-		if (highlightEachRow > 0)
+		int highlightEachRow = boxesInEachRowQ/2-1;
+		for (int i=0, j=boxesInEachRowQ; i<boxesInEachRowQ; i++, j++)
 		{
-			for (int i=0, j=indexesForSwapping[1][0].get(0).x; i<=indexesForSwapping[0][2].get(indexesForSwapping[0][2].size()-1).x; i++, j++)
+			for (int a=size-highlightEachRow; a<size; a++)	//because get second last index
 			{
-				for (int a=size-2; a<size; a++)	//size-2 because get second last index
-				{
-					int num = this.matrix[i][a];
-					this.matrix[i][a] = this.matrix[j][a];
-					this.matrix[j][a] = num;
-				}
+				int num = this.matrix[i][a];
+				this.matrix[i][a] = this.matrix[j][a];
+				this.matrix[j][a] = num;
 			}
 		}
 	}
