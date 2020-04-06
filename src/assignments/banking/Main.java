@@ -171,7 +171,7 @@ public class Main
 					double amount = scanner.nextDouble();
 					if (c.getAccount().deposit(amount)) 
 					{
-						println("Money has been deposited. Current balance: " + c.getAccount().getBalance());
+						println("Money has been deposited. Current balance:  " + c.getAccount().getBalance());
 						break;
 					}
 					else
