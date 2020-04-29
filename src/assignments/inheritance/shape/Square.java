@@ -1,4 +1,4 @@
-package assignments.inheritance;
+package assignments.inheritance.shape;
 
 public class Square extends Rectangle
 {
